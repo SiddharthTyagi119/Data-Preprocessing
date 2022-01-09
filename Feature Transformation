@@ -1,1 +1,62 @@
 
+#### Train Test Split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+#### If you want to check whether feature is guassian or normal distributed
+#### Q-Q plot
+def plot_data(df,feature):
+    plt.figure(figsize=(10,6))
+    plt.subplot(1,2,1)
+    df[feature].hist()
+    plt.subplot(1,2,2)
+    stat.probplot(df[feature],dist='norm',plot=pylab)
+    plt.show()
+
+1---######  Standarization
+#### standarisation: We use the Standardscaler from sklearn library
+from sklearn.preprocessing import StandardScaler
+scaler=StandardScaler()
+
+### fit vs fit_transform
+X_train_scaled=scaler.fit_transform(X_train)
+X_train_scaled
+
+X_test_scaled=scaler.transform(X_test)
+X_test_scaled
+
+2---### Min Max Scaling
+from sklearn.preprocessing import MinMaxScaler
+min_max=MinMaxScaler()
+df_minmax=pd.DataFrame(min_max.fit_transform(X_train))
+df_minmax.head()
+
+3---####  Robust Scaler
+from sklearn.preprocessing import RobustScaler
+scaler=RobustScaler()
+df_robust_scaler=pd.DataFrame(scaler.fit_transform(X_train))
+df_robust_scaler.head()
+scaler.transform(X_test)
+
+4---Lograthmic Distribution
+import numpy as np
+df['Age_log']=np.log(df['Age'])
+plot_data(df,'Age_log')
+
+5---Reciprocal Transformation
+df['Age_reciprocal']=1/df.Age
+plot_data(df,'Age_reciprocal')
+
+6---##### Square Root Transformation
+df['Age_sqaure']=df.Age**(1/2)
+plot_data(df,'Age_sqaure')
+
+7---#### Exponential Transformation
+df['Age_exponential']=df.Age**(1/1.2)
+plot_data(df,'Age_exponential')
+
+8---Box Cox Transformation
+df['Age_Boxcox'],parameters=stat.boxcox(df['Age'])
+print(parameters)
+plot_data(df,'Age_Boxcox')
+
