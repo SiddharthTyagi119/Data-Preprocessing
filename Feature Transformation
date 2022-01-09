@@ -1,10 +1,12 @@
 
 #### Train Test Split
+###Perform this train test split till robust scaler
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
 #### If you want to check whether feature is guassian or normal distributed
 #### Q-Q plot
+Perform this step before Log distribution
 def plot_data(df,feature):
     plt.figure(figsize=(10,6))
     plt.subplot(1,2,1)
