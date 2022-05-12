@@ -2,8 +2,6 @@
 #### standarisation: We use the Standardscaler from sklearn library
 from sklearn.preprocessing import StandardScaler
 scaler=StandardScaler()
-
-### fit vs fit_transform
 X_train_scaled=scaler.fit_transform(X_train)
 X_train_scaled
 
@@ -32,11 +30,11 @@ plot_data(df,'Age_log')
 df['Age_reciprocal']=1/df.Age
 plot_data(df,'Age_reciprocal')
 
-6---##### Square Root Transformation
+6---Square Root Transformation
 df['Age_sqaure']=df.Age**(1/2)
 plot_data(df,'Age_sqaure')
 
-7---#### Exponential Transformation
+7---Exponential Transformation
 df['Age_exponential']=df.Age**(1/1.2)
 plot_data(df,'Age_exponential')
 
