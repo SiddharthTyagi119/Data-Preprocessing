@@ -1,0 +1,92 @@
+1---Drop constant features using variance threshold
+var_thres=VarianceThreshold(threshold=0)
+var_thres.fit(X_train)
+
+var_thres.get_support()
+
+constant_columns = [column for column in X_train.columns
+                    if column not in X_train.columns[var_thres.get_support()]]
+
+print(len(constant_columns))
+
+X_train.drop(constant_columns,axis=1)
+
+2---Feature Selection with Correlation
+# with the following function we can select highly correlated features
+# it will remove the first feature that is correlated with anything other feature
+
+def correlation(dataset, threshold):
+    col_corr = set()  # Set of all the names of correlated columns
+    corr_matrix = dataset.corr()
+    for i in range(len(corr_matrix.columns)):
+        for j in range(i):
+            if abs(corr_matrix.iloc[i, j]) > threshold: # we are interested in absolute coeff value
+                colname = corr_matrix.columns[i]  # getting the name of column
+                col_corr.add(colname)
+    return col_corr
+    
+corr_features = correlation(X_train, 0.7)
+len(set(corr_features))
+
+corr_features
+
+X_train.drop(corr_features,axis=1)
+
+
+3---Select features using information gain(classification)
+from sklearn.feature_selection import mutual_info_classif
+# determine the mutual information
+mutual_info = mutual_info_classif(X_train, y_train)
+mutual_info
+
+mutual_info = pd.Series(mutual_info)
+mutual_info.index = X_train.columns
+mutual_info.sort_values(ascending=False)
+
+mutual_info.sort_values(ascending=False).plot.bar(figsize=(20, 8))
+
+from sklearn.feature_selection import SelectKBest
+#No we Will select the  top 5 important features
+sel_five_cols = SelectKBest(mutual_info_classif, k=5)
+sel_five_cols.fit(X_train, y_train)
+X_train.columns[sel_five_cols.get_support()]
+
+4---Select features using information gain(Regression)
+from sklearn.feature_selection import mutual_info_regression
+# determine the mutual information
+mutual_info = mutual_info_regression(X_train.fillna(0), y_train)
+mutual_info
+
+mutual_info = pd.Series(mutual_info)
+mutual_info.index = X_train.columns
+mutual_info.sort_values(ascending=False)
+
+mutual_info.sort_values(ascending=False).plot.bar(figsize=(15,5))
+
+from sklearn.feature_selection import SelectPercentile
+## Selecting the top 20 percentile
+selected_top_columns = SelectPercentile(mutual_info_regression, percentile=20)
+selected_top_columns.fit(X_train.fillna(0), y_train)
+
+selected_top_columns.get_support()
+
+X_train.columns[selected_top_columns.get_support()]
+
+5---Chi Square For Feature Selection
+## Perform chi2 test
+### chi2 returns 2 values- Fscore and the pvalue
+from sklearn.feature_selection import chi2
+f_p_values=chi2(X_train,y_train)
+
+f_p_values
+
+import pandas as pd
+p_values=pd.Series(f_p_values[1])
+p_values.index=X_train.columns
+p_values
+
+p_values.sort_index(ascending=False)
+
+
+
+
