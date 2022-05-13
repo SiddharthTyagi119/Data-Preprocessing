@@ -1,1 +1,68 @@
+1-To get the number of columns
+df.columns
+
+2-To get the information of features
+df.info()
+
+3-To get stats information of columns
+df.describe()
+
+4-To get number of features and rows
+df.shape
+
+5-Check null valuse
+df.isnull().sum()
+
+6-Groupby
+df.groupby([features]).size()
+
+
+7-Heatmap to represent null values
+sns.heatmap(df.isnull(),yticklabels=False,cbar=False,cmap='viridis')
+
+8-To get n number of rows
+df.head() and df.tail()
+
+9-To check datatypes
+df.dtypes
+
+10-To get the count values of categories of a feature
+df.country.value_counts().values
+
+with graph
+plt.pie(country_val[:3],labels=country[:3],autopct='%1.2f%%')
+
+11-Custom code to get features with missing values
+null=[features for features in df.columns if df[features].isnull().sum()>1]
+
+
+12-To print the feature which have missing values with percentage
+for feature in null:
+     print(feature,np.round(dataset[feature].isnull().mean(),4),'%missing values')
+     
+13-Find relationship between missing values and target variable
+for feature in null:
+    data = dataset.copy()
+    
+    # let's make a variable that indicates 1 if the observation was missing or zero otherwise
+    data[feature] = np.where(data[feature].isnull(), 1, 0)
+    
+    # let's calculate the mean SalePrice where the information is missing or present
+    data.groupby(feature)['SalePrice'].median().plot.bar()
+    plt.title(feature)
+    plt.show()
+    
+14-List of numerical variables
+# list of numerical variables
+numerical_features = [feature for feature in df.columns if dataset[feature].dtypes != 'O']
+print('Number of numerical variables: ', len(numerical_features))
+
+# visualise the numerical variables
+df[numerical_features].head()
+
+
+
+
+
+
 
