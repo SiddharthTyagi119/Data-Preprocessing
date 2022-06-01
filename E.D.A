@@ -14,7 +14,7 @@ df.shape
 df.isnull().sum()
 
 6-Groupby
-df.groupby([features]).size()
+df.groupby(['features','sex']).size()
 
 
 7-Heatmap to represent null values
@@ -28,6 +28,7 @@ df.dtypes
 
 10-To get the count values of categories of a feature
 df.country.value_counts().values
+df.country.value_counts().index
 
 with graph
 plt.pie(country_val[:3],labels=country[:3],autopct='%1.2f%%')
@@ -59,6 +60,25 @@ print('Number of numerical variables: ', len(numerical_features))
 
 # visualise the numerical variables
 df[numerical_features].head()
+
+15-Heatmap for null values
+sns.heatmap(df.isnull(),yticklabels=False,cbar=False,cmap='virdis')
+
+16-Combine two df
+pd.merge(df,df_country,on='countrycode',how='left')
+
+17-Merge train and test data
+df=df_train.append(df_test)
+df.head()
+
+18-To drop a column
+df.drop(['id'],axis=1,inplace=True)
+
+19-Map
+df['gender']=df['gender'].map({'F':0,'M':1})
+
+20-Fill missing values with mode
+df['code']=df['code'].fillna(df['code'].mode()[0])
 
 
 
